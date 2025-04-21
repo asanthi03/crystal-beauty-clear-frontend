@@ -5,16 +5,16 @@ export default function AdminPage() {
   return (
     <div className="w-full h-screen bg-gray-300 flex">
       <div className="w-[300px] h-full bg-black">
-        <Link to="./admin" className="flex justify-center items-center w-[80%] h-[40px] bg-blue-500 text-white rounded-xl text-center p-2 m-2 hover:bg-orange-500">
+        <Link to="/admin" className="flex justify-center items-center w-[80%] h-[40px] bg-blue-500 text-white rounded-xl text-center p-2 m-2 hover:bg-orange-500">
           Dashboard
         </Link>
-        <Link to="./admin/users" className="flex justify-center items-center w-[80%] h-[40px] bg-blue-500 text-white rounded-xl text-center p-2 m-2 hover:bg-orange-500">
+        <Link to="/admin/users" className="flex justify-center items-center w-[80%] h-[40px] bg-blue-500 text-white rounded-xl text-center p-2 m-2 hover:bg-orange-500">
           <FaUsers className="m-2"/>Users
         </Link>
-        <Link to="./admin/products" className="flex justify-center items-center w-[80%] h-[40px] bg-blue-500 text-white rounded-xl text-center p-2 m-2 hover:bg-orange-500">
+        <Link to="/admin/products" className="flex justify-center items-center w-[80%] h-[40px] bg-blue-500 text-white rounded-xl text-center p-2 m-2 hover:bg-orange-500">
           <FaStore className="m-2"/>Products
         </Link>
-        <Link to="./admin/orders" className="flex justify-center items-center w-[80%] h-[40px] bg-blue-500 text-white rounded-xl text-center p-2 m-2 hover:bg-orange-500">
+        <Link to="/admin/orders" className="flex justify-center items-center w-[80%] h-[40px] bg-blue-500 text-white rounded-xl text-center p-2 m-2 hover:bg-orange-500">
           <FaFileInvoice className="m-2"/>Orders
         </Link>
       </div>
