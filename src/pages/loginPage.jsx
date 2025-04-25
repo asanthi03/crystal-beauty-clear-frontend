@@ -22,7 +22,7 @@ export default function LoginPage(){
                 toast.success("Login Successful")
                 localStorage.setItem("token" , response.data.token)
 
-                const user = response.user.date;
+                const user = response.data.user;
                 if(user.role == "admin"){
                     navigate("/admin")
                 }else{
@@ -31,10 +31,10 @@ export default function LoginPage(){
             }
         ).catch(
             (error)=>{
-                console.log("Login Failed", error.response.data);
-                toast.error(error.response.data.message || "Login Unsuccessful")
+                console.log("Login Failed", error);
+                // toast.error(error.data.message || "Login Unsuccessful")
             }
-        )
+        ) //menna
 
         console.log("Login button clicked");
     }
