@@ -2,6 +2,7 @@ import { Link, Route, Routes } from "react-router-dom"
 import { FaUsers, FaStore, FaFileInvoice } from "react-icons/fa"
 import AdminProductsPage from "./admin/products"
 import AddProductForm from "./admin/addProductForm"
+import EditProductForm from "./admin/editProductForm"
 
 export default function AdminPage() {
   return (
@@ -26,6 +27,7 @@ export default function AdminPage() {
           <Route path="/products" element={<AdminProductsPage/>}/>
           <Route path="/orders" element={<h1>Orders</h1>}/>
           <Route path="/addProducts" element={<AddProductForm/>}/>
+          <Route path="/editProducts" element={<EditProductForm/>}/>
         </Routes>
       </div>
     </div>

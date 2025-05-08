@@ -1,16 +1,17 @@
 import { useState } from "react"
 import axios from "axios";
 import toast from "react-hot-toast";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { FaS } from "react-icons/fa6";
 
 export default function LoginPage(){
     const [email , setEmail] = useState("");
     const [password , setPassword] = useState("");
     const navigate = useNavigate();
+    const [loading, setLoading] = useState(false)
 
     function handleLogin(){
-        console.log("Email: " , email);
-        console.log("Password: " , password);
+        setLoading(true)
 
 
         axios.post(import.meta.env.VITE_BACKEND_URL + "/api/user/login",{
@@ -28,13 +29,15 @@ export default function LoginPage(){
                 }else{
                     navigate("/")
                 }
+                setLoading(false)
             }
         ).catch(
             (error)=>{
                 console.log("Login Failed", error);
                 // toast.error(error.data.message || "Login Unsuccessful")
+                setLoading(false)
             }
-        ) //menna
+        )
 
         console.log("Login button clicked");
     }
@@ -55,7 +58,18 @@ export default function LoginPage(){
                 <input onChange={(e)=>{
                     setPassword(e.target.value)
                 }} type="password" placeholder="password" className="w-[350px] h-[40px] border border-white rounded-xl text-center m-3" />
-                <button onClick={handleLogin} className="w-[350px] h-[40px] bg-green-800 text-white m-3 rounded-xl cursor-pointer">Login Here</button>
+                <button onClick={handleLogin} className="w-[350px] h-[40px] bg-green-800 text-white m-3 rounded-xl cursor-pointer">
+                    {
+                        loading? "Loading...":"Login"
+                    }
+                </button>
+                <p className="text-white">
+                    Don't have an account yet?
+                    &nbsp;
+                    <span className="text-green-400 font-bold hover:text-shadow-yellow-300"> 
+                        <Link to={"/register"}>Register Now</Link>
+                    </span>
+                </p>
 
             </div>
         </div>
