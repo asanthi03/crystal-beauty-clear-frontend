@@ -41,7 +41,7 @@ export default function AddProductForm() {
                 labeledPrice: parseFloat(labeledPrice),
                 description: description,
                 stock: parseInt(stock),
-                images: result
+                images: [result]
             };
 
             const token = localStorage.getItem("token");

@@ -2,6 +2,8 @@ import { useState } from "react"
 import axios from "axios";
 import toast from "react-hot-toast";
 import { Link, useNavigate } from "react-router-dom";
+import { useGoogleLogin } from "@react-oauth/google";
+import { GrGoogle } from "react-icons/gr";
 
 export default function RegisterPage() {
     const [formData, setFormData] = useState({
@@ -14,6 +16,34 @@ export default function RegisterPage() {
     });
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
+    const loginWithGoogle = useGoogleLogin(
+        {
+            onSuccess: (res) => {
+                setLoading(true)
+                // Remove quotes around the environment variable
+                axios.post(import.meta.env.VITE_BACKEND_URL + "/api/user/google", {
+                    accessToken: res.access_token
+                }).then(
+                    (response) => {
+                        console.log("Login Successful", response.data);
+                        toast.success("Login Successful")
+                        localStorage.setItem("token", response.data.token)
+
+                        const user = response.data.user;
+                        if (user.role == "admin") {
+                            navigate("/admin")
+                        } else {
+                            navigate("/")
+                        }
+                        setLoading(false)
+                    }
+                ).catch(error => {
+                    console.error("Error:", error);
+                });
+            }
+        }
+    )
+
 
     function handleChange(e) {
         const { name, value } = e.target;
@@ -53,11 +83,11 @@ export default function RegisterPage() {
     return (
         <div className="w-full h-screen bg-red-900 bg-[url(/login-bg.jpg)] bg-center bg-cover flex">
             <div className="w-[50%] h-full border border-amber-900"></div>
-            
+
             <div className="w-[50%] h-full border border-amber-500 flex justify-center items-center">
                 <div className="w-[450px] h-[650px] backdrop-blur-xl shadow-xl rounded-xl flex flex-col justify-center items-center">
                     <h2 className="text-white text-2xl font-bold mb-6">Create Your Account</h2>
-                    
+
                     <input
                         name="firstName"
                         value={formData.firstName}
@@ -66,7 +96,7 @@ export default function RegisterPage() {
                         placeholder="First Name"
                         className="w-[350px] h-[40px] border border-white rounded-xl text-center m-3"
                     />
-                    
+
                     <input
                         name="lastName"
                         value={formData.lastName}
@@ -75,7 +105,7 @@ export default function RegisterPage() {
                         placeholder="Last Name"
                         className="w-[350px] h-[40px] border border-white rounded-xl text-center m-3"
                     />
-                    
+
                     <input
                         name="email"
                         value={formData.email}
@@ -84,7 +114,7 @@ export default function RegisterPage() {
                         placeholder="Email"
                         className="w-[350px] h-[40px] border border-white rounded-xl text-center m-3"
                     />
-                    
+
                     <input
                         name="phone"
                         value={formData.phone}
@@ -93,7 +123,7 @@ export default function RegisterPage() {
                         placeholder="Phone Number"
                         className="w-[350px] h-[40px] border border-white rounded-xl text-center m-3"
                     />
-                    
+
                     <input
                         name="password"
                         value={formData.password}
@@ -102,7 +132,7 @@ export default function RegisterPage() {
                         placeholder="Password"
                         className="w-[350px] h-[40px] border border-white rounded-xl text-center m-3"
                     />
-                    
+
                     <input
                         name="confirmPassword"
                         value={formData.confirmPassword}
@@ -111,19 +141,25 @@ export default function RegisterPage() {
                         placeholder="Confirm Password"
                         className="w-[350px] h-[40px] border border-white rounded-xl text-center m-3"
                     />
-                    
-                    <button 
-                        onClick={handleRegister} 
+
+                    <button
+                        onClick={handleRegister}
                         className="w-[350px] h-[40px] bg-green-800 text-white m-3 rounded-xl cursor-pointer"
                         disabled={loading}
                     >
                         {loading ? "Processing..." : "Register"}
                     </button>
-                    
+                    <button onClick={loginWithGoogle} className="mt-[20px] w-[350px] h-[40px] bg-green-800 text-white m-3 rounded-xl cursor-pointer flex items-center justify-center">
+                        <GrGoogle className="mr-[10px]" />
+                        {
+                            loading ? "Loading..." : "Login with Google"
+                        }
+                    </button>
+
                     <p className="text-white">
                         Already have an account?
                         &nbsp;
-                        <span className="text-green-400 font-bold hover:text-shadow-yellow-300"> 
+                        <span className="text-green-400 font-bold hover:text-shadow-yellow-300">
                             <Link to={"/login"}>Login Here</Link>
                         </span>
                     </p>

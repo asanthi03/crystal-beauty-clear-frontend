@@ -4,24 +4,52 @@ const supabase = createClient("https://bqmzejbzmmsuvujjxrnf.supabase.co", "eyJhb
 
 
 
-export default function mediaUpload(file) {
-    const promise = new Promise(
-        (resolve, reject) => {
-            if (file == null) {
-                reject("No file selected")
-            }
-            const timestamp = new Date().getTime()
-            const newFileName = timestamp + file.name
+// export default function mediaUpload(file) {
+//     const promise = new Promise(
+//         (resolve, reject) => {
+//             if (file == null) {
+//                 reject("No file selected")
+//             }
+//             const timestamp = new Date().getTime()
+//             const newFileName = timestamp + file.name
 
-            supabase.storage.from("images").upload(newFileName, file, {
-                cacheControl: "3600",
-                upsert: false,
-            }).then(
-                ()=>{
-                    const url = supabase.storage.from("images").getPublicUrl(newFileName).data.publicUrl
-                    console.log(url)
-                }
-            )
-        }
-    )
+//             supabase.storage.from("images").upload(newFileName, file, {
+//                 cacheControl: "3600",
+//                 upsert: false,
+//             }).then(
+//                 ()=>{
+//                     const url = supabase.storage.from("images").getPublicUrl(newFileName).data.publicUrl
+//                     console.log(url)
+//                 }
+//             )
+//         }
+//     )
+// }
+
+export default async function mediaUpload(file) {
+    if (!file) {
+        throw new Error("No file selected");
+    }
+
+    const timestamp = new Date().getTime();
+    const newFileName = `${timestamp}-${file.name}`;
+
+    // 1. Upload the file
+    const { error: uploadError } = await supabase.storage
+        .from("images")
+        .upload(newFileName, file, {
+            cacheControl: "3600",
+            upsert: false,
+        });
+
+    if (uploadError) {
+        throw new Error(`Upload failed: ${uploadError.message}`);
+    }
+
+    // 2. Get public URL
+    const { data: { publicUrl } } = supabase.storage
+        .from("images")
+        .getPublicUrl(newFileName);
+
+    return publicUrl;
 }
