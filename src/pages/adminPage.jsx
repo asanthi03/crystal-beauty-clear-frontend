@@ -51,7 +51,9 @@ export default function AdminPage() {
               <FaFileInvoice className="m-2" />Orders
             </Link>
           </div>
-    
+
+
+{/*           checking 2*/}
           <div className="h-full bg-amber-50 w-[calc(100%-300px)] rounded-xl p-2">
             <Routes>
               <Route path="/users" element={<h1>Users</h1>} />
